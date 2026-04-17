@@ -55,7 +55,7 @@ else:
         saque = float(input("Digite o valor do saque: "))
         saldo -= saque
         if saldo + limite <= 0:
-            print("Saldo insuficiente para realizar o saque")
+            print(f"Saldo insuficiente para realizar o saque, falta R${abs(saldo + limite):.2f} para completar o saque.")
         else:
             print("Saque realizado com sucesso")
             print_menu()
@@ -83,7 +83,7 @@ else:
 
     #Consulta de limite
     elif user_selection_menu == '4':
-        print("Limite: R$100,00") 
+        print(f"Limite: R${limite:.2f}") 
         
     #Encerrar
     elif user_selection_menu == '5':
