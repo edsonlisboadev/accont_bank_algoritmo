@@ -1,4 +1,6 @@
-user_selection = input('Digite 1 para acessar e 2 para encerrar')
+
+#declaração de variáveis
+user_selection = input("\n Digite 1 para acessar e 2 para encerrar: \n ")
 user_right_email = 'admin'
 user_right_password = 1234
 retry = 0
@@ -15,11 +17,15 @@ def print_menu():
     print("4. Consultar Limite")
     print("5. Encerrar")
 
+#função para código inválido
+def invalid_code():
+    print("Valor inválido, tente novamente.")
+
 if user_selection == '2':
     print("Encerrado")
     exit()
 elif user_selection != '1':
-    print("Opção inválida")
+    invalid_code()
     exit()
 else:
 
@@ -36,47 +42,68 @@ else:
         if retry == 3:
             print("Número de tentativas excedidas. Fim de programa.")
             exit()
+            continue
     
     # Loop do menu principal
     while True:
-        print_menu()
-        user_selection_menu = input("Escolha uma opção: ")
-        
+        try:
+            print_menu()
+            user_selection_menu = input("Escolha uma opção: ")
+        except ValueError:
+            invalid_code()
+            continue
+
         # Consulta de saldo 
         if user_selection_menu == '1':
-            print(f"Saldo: R${saldo:.2f}")
-            voltar = input("Escreva 1 para voltar: ")
-            if voltar == '1':
-                continue
+            while True:
+                try:
+                    print(f"Saldo: R${saldo:.2f}")
+                    break
+                except ValueError:
+                        invalid_code()
+                        continue
+                
 
         # Saque
         elif user_selection_menu == '2':
-            saque = float(input("Digite o valor do saque: "))
-            saldo -= saque
-            if saldo + limite <= 0:
-                print(f"Saldo insuficiente para realizar o saque, falta R${abs(saldo + limite):.2f} para completar o saque.")
-            else:
-                print("Saque realizado com sucesso")
+            while True:
+                try:
+                    saque = float(input("Digite o valor do saque: "))
+                    break
+                except ValueError:
+                    invalid_code()
+                    continue
+                saldo -= saque
+                if saldo + limite <= 0:
+                    print(f"Saldo insuficiente para realizar o saque, falta R${abs(saldo + limite):.2f} para completar o saque.")
+                else:
+                    print("Saque realizado com sucesso")
+                    
 
         # Depósito
         elif user_selection_menu == '3':
-            deposito = float(input("Digite o valor do depósito: "))
-            if limite < 100:
-                diferenca = 100 - limite  
-                print(f"Limite total: {limite:.2f}")
-                if deposito >= diferenca:
-                    print(f"Depósito de R${deposito:.2f} completou o limite.")
-                    limite = 100
-                    saldo += deposito - diferenca 
-                    print(f"Saldo atualizado: R${saldo:.2f}")
+            while True:
+                try:
+                    deposito = float(input("Digite o valor do depósito: "))
+                    break
+                except ValueError:
+                    invalid_code()
+                if limite < 100:
+                    diferenca = 100 - limite  
+                    print(f"Limite total: {limite:.2f}")
+                    if deposito >= diferenca:
+                        print(f"Depósito de R${deposito:.2f} completou o limite.")
+                        limite = 100
+                        saldo += deposito - diferenca 
+                        print(f"Saldo atualizado: R${saldo:.2f}")
+                    else:
+                        limite += deposito  
+                        print(f"Limite atualizado: R${limite:.2f}")
                 else:
-                    limite += deposito  
-                    print(f"Limite atualizado: R${limite:.2f}")
-            else:
-                saldo += deposito
-                print(f"Saldo atual: R${saldo:.2f}") 
+                    saldo += deposito
+                    print(f"Saldo atual: R${saldo:.2f}") 
 
-            print("Depósito realizado com sucesso")
+                print("Depósito realizado com sucesso")
 
         # Consulta de limite
         elif user_selection_menu == '4':
@@ -87,4 +114,4 @@ else:
             print("Encerrado")
             exit()
         else:
-            print("Teste um número válido")
+            invalid_code()
